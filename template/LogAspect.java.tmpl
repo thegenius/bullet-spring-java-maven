@@ -1,0 +1,27 @@
+package com.sto.automation.admin.fun;//package com.alibaba.quickstarter.fnc;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@Aspect
+@Component
+public class LogAspect {
+
+    @Around("@annotation(logAnnotation) && execution(* *(..))")
+    public Object around(ProceedingJoinPoint joinPoint, Log logAnnotation) throws Throwable {
+        Class clazz = joinPoint.getTarget().getClass();
+        String method = joinPoint.getSignature().getName();
+        Object[] params = joinPoint.getArgs();
+        String paramStr = JsonUtil.toJson(params).orElse("");
+        ExecuteContext.getExecuteContext().begin(clazz, method, paramStr);
+        Object result = joinPoint.proceed();
+        String resultStr = JsonUtil.toJson(result).orElse("");
+        ExecuteContext.getExecuteContext().end(clazz, method, resultStr);
+        log.info("{}", ExecuteContext.getExecuteContext().toString());
+        return result;
+    }
+}

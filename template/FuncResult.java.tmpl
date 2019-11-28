@@ -1,0 +1,34 @@
+package com.sto.automation.admin.fun;
+
+import lombok.Data;
+
+/**
+ * @author Wang Wei
+ * @param <T>
+ */
+
+@Data
+public class FuncResult<T> {
+
+    public static<T> FuncResult<T> of(T result) {
+        FuncResult funcResult = new FuncResult();
+        funcResult.result = result;
+        return funcResult;
+    }
+
+    public static<T> FuncResult<T> ofErr(FuncError err) {
+        FuncResult funcResult = new FuncResult();
+        funcResult.error = err;
+        return funcResult;
+    }
+
+    @Data
+    public static class FuncError {
+        private String methodName;
+        private String methodParam;
+        private String errorMsg;
+    }
+
+    private FuncError error;
+    private T result;
+}

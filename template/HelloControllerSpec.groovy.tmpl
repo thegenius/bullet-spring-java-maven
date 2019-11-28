@@ -1,0 +1,36 @@
+package com.sto.automation.biz
+
+import com.sto.automation.admin.Application
+import io.restassured.RestAssured
+import org.junit.Test
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.web.server.LocalServerPort
+import spock.lang.Specification
+import static io.restassured.RestAssured.given
+
+
+@SpringBootTest(classes = Application.class,
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+class HelloControllerSpec extends Specification {
+
+    @LocalServerPort
+    int port
+
+
+    def setup() {
+        RestAssured.port = port
+    }
+
+    @Test
+    void test() {
+        expect:
+        def response = given().get(url)
+        response.statusCode() == code
+        response.body().asString() == result
+
+        where:
+        url                | result    | code
+        "/"                | "welcome" | 200
+        "checkpreload.htm" | "success" | 200
+    }
+}

@@ -1,0 +1,65 @@
+package com.sto.automation.dal
+
+import com.sto.automation.admin.Application
+import com.sto.automation.admin.dal.gen.tables.daos.EntityBasicInfoDao
+import com.sto.automation.admin.dal.gen.tables.pojos.EntityBasicInfo
+import io.restassured.RestAssured
+import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.web.server.LocalServerPort
+import spock.lang.Specification
+
+
+@SpringBootTest(classes = Application.class,
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+class EntityBasicInfoDaoSpec extends Specification {
+
+    @LocalServerPort
+    int port
+
+    @Autowired
+    private EntityBasicInfoDao basicInfoDao
+
+    def setup() {
+        RestAssured.port = port
+    }
+
+    @Test
+    void test() {
+        given:
+        def info = new EntityBasicInfo()
+        info.setId(23L)
+        info.setName("ziyu")
+        info.setNickname("test")
+        info.setHelloname("hello")
+        info.setWorldname("world")
+        basicInfoDao.insert(info)
+
+        expect:
+        basicInfoDao.fetchOneById(userId).helloname == result
+
+        where:
+        userId | result
+        23L    | "hello"
+    }
+
+    void test2() {
+        given:
+        def info = new EntityBasicInfo()
+        info.setId(25L)
+        info.setName("ziyu")
+        info.setNickname("test")
+        info.setHelloname("hello2")
+        info.setWorldname("world")
+        basicInfoDao.insert(info)
+
+        expect:
+        basicInfoDao.fetchOneById(userId).helloname == result
+
+        where:
+        userId | result
+        25L    | "hello2"
+    }
+
+}

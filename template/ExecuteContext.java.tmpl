@@ -1,0 +1,145 @@
+package com.sto.automation.admin.fun;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.UUID;
+
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+public class ExecuteContext {
+
+
+    private static final Base64.Encoder encoder = Base64.getEncoder();
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+    static private ThreadLocal<ExecuteContext> executeContext = ThreadLocal.withInitial(ExecuteContext::new);
+
+
+    public static ExecuteContext getExecuteContext() {
+        return executeContext.get();
+    }
+
+    private static String toDateString(Long t) {
+        Date time = new Date(t);
+        return dateFormat.format(time);
+    }
+
+    @Data
+    @ToString
+    public static class ExecutePath {
+        Long userId = 0L;
+        String scope = "";
+        Long bizId = 0L;
+        String uuid;
+
+        Integer level;
+        String clazz;
+        String method;
+        String param;
+        String result = "";
+        Long beginTime;
+        Long endTime = 0L;
+        Long usedTime = 0L;
+
+        public String getPrettyString(Boolean isDev) {
+            if (isDev) {
+                return toPrettyStringDev();
+            } else {
+                return toPrettyString();
+            }
+        }
+
+        private String toPrettyString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append( userId + "," );
+            builder.append( scope + "," );
+            builder.append( bizId + "," );
+            builder.append( uuid + "," );
+            builder.append( level + "," );
+            builder.append( clazz + "," );
+            builder.append( method + "," );
+            builder.append( encoder.encodeToString(param.getBytes())+ ","  );
+            builder.append( encoder.encodeToString(result.getBytes()) + "," );
+            builder.append( toDateString(beginTime)+ "," );
+            builder.append( toDateString(endTime));
+            return builder.toString();
+        }
+
+        private String toPrettyStringDev() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("\n");
+            builder.append(StringUtil.indentLine(level, "{"));
+            builder.append(StringUtil.indentLine(level, "\t\"user\":\t\t\"" + userId + "\""));
+            builder.append(StringUtil.indentLine(level, "\t\"scope\":\t\"" + scope + "\""));
+            builder.append(StringUtil.indentLine(level, "\t\"biz\":\t\t\"" + bizId + "\""));
+            builder.append(StringUtil.indentLine(level, "\t\"uuid\":\t\t\"" + uuid + "\""));
+            builder.append(StringUtil.indentLine(level, "\t\"level\":\t" + level));
+            builder.append(StringUtil.indentLine(level, "\t\"class\":\t\"" + clazz+"\""));
+            builder.append(StringUtil.indentLine(level, "\t\"method\":\t\"" + method+"\""));
+            builder.append(StringUtil.indentLine(level, "\t\"param\":\t" + param));
+            builder.append(StringUtil.indentLine(level, "\t\"result\":\t" + result));
+            builder.append(StringUtil.indentLine(level, "\t\"begin\":\t\""+toDateString(beginTime)+"\""));
+            builder.append(StringUtil.indentLine(level, "\t\"end\":\t\t\""+ toDateString(endTime)+"\""));
+            builder.append(StringUtil.indentLine(level, "\t\"unit\":\t\t\"ms\""));
+            builder.append(StringUtil.indentLine(level, "\t\"used\":\t\t"+ usedTime.toString()));
+            builder.append(StringUtil.indentLine(level, "}"));
+            return builder.toString();
+        }
+
+    }
+
+    private Boolean isDev = true;
+    private Long userId;
+    private Long bizId;
+    private String scope;
+    private String uuid = UUID.randomUUID().toString();
+    private Integer currentLevel = 0;
+    private ExecutePath currentPath;
+    private ArrayList<ExecutePath> paths = new ArrayList<>();
+
+    public void init(Long userId, String scope, Long bizId, Boolean isDev) {
+        this.userId = userId;
+        this.scope = scope;
+        this.bizId = bizId;
+        this.isDev = isDev;
+    }
+
+    public void begin(Class clazz, String method, String param) {
+        this.currentPath = new ExecutePath();
+        this.currentPath.level = this.currentLevel;
+        this.currentPath.beginTime = System.currentTimeMillis();
+        this.currentPath.clazz = clazz.getCanonicalName();
+        this.currentPath.method = method;
+        this.currentPath.param = param;
+        this.currentPath.uuid = this.uuid;
+        this.currentPath.userId = this.userId;
+        this.currentPath.bizId = this.bizId;
+        this.currentPath.scope = this.scope;
+        this.paths.add(this.currentPath);
+        this.currentLevel += 1;
+    }
+
+    public void end(Class clazz, String method, String result){
+        this.currentPath.endTime = System.currentTimeMillis();
+        this.currentPath.result = result;
+        this.currentPath.usedTime = this.currentPath.endTime - this.currentPath.beginTime;
+        this.currentLevel -= 1;
+        if (this.currentLevel >= 1) {
+            this.currentPath = this.paths.get(this.currentLevel - 1);
+        } else {
+            this.currentPath = null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (ExecutePath path: paths) {
+            builder.append(path.getPrettyString(this.isDev));
+        }
+        return builder.toString();
+    }
+}
