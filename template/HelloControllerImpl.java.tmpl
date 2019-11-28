@@ -1,12 +1,12 @@
-package com.sto.automation.admin.biz;
+package {{context.group}}.{{context.project}}.biz;
 
-import com.sto.automation.admin.dal.gen.tables.daos.EntityBasicInfoDao;
-import com.sto.automation.admin.dal.gen.tables.pojos.EntityBasicInfo;
-import com.sto.automation.admin.fun.Log;
+import {{context.group}}.{{context.project}}.dal.gen.tables.daos.EntityBasicInfoDao;
+import {{context.group}}.{{context.project}}.dal.gen.tables.pojos.EntityBasicInfo;
+import {{context.group}}.{{context.project}}.fun.Log;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import com.sto.automation.admin.HelloController;
+import {{context.group}}.{{context.project}}.api.HelloController;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;

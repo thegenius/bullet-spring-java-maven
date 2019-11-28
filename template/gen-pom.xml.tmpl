@@ -3,8 +3,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>admin</artifactId>
-        <groupId>com.sto.automation</groupId>
+        <artifactId>{{context.project}}</artifactId>
+        <groupId>{{context.group}}</groupId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -87,7 +87,7 @@
                             <excludes>flyway_schema_history</excludes>          <!-- 需要排除的表 -->
                         </database>
                         <target>
-                            <packageName>com.sto.automation.admin.dal.gen</packageName> <!-- 生成的包名 -->
+                            <packageName>{{context.group}}.{{context.project}}.dal.gen</packageName> <!-- 生成的包名 -->
                             <directory>${project.parent.basedir}/app/src/main/java/
                             </directory>          <!-- 生成的代码位置 -->
                         </target>

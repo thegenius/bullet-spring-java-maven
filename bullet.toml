@@ -1,5 +1,5 @@
 group = "com.example"
-project = "admin"
+project = "test"
 
 [resources.basic_info]
 name_info = {default_name = "hello"}

@@ -3,8 +3,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>admin</artifactId>
-        <groupId>com.sto.automation</groupId>
+        <artifactId>{{context.project}}</artifactId>
+        <groupId>{{context.group}}</groupId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sto.automation</groupId>
+            <groupId>{{context.group}}.{{context.project}}</groupId>
             <artifactId>api</artifactId>
             <version>1.0</version>
         </dependency>
@@ -89,33 +89,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>com.baomidou</groupId>-->
-            <!--<artifactId>mybatis-plus-boot-starter</artifactId>-->
-            <!--<version>3.2.0</version>-->
-        <!--</dependency>-->
-
-        <!-- begin of jooq -->
-        <!--<dependency>-->
-            <!--<groupId>org.jooq</groupId>-->
-            <!--<artifactId>jooq</artifactId>-->
-            <!--<version>3.11.4</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.jooq</groupId>-->
-            <!--<artifactId>jooq-meta</artifactId>-->
-            <!--<version>3.11.4</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.jooq</groupId>-->
-            <!--<artifactId>jooq-codegen</artifactId>-->
-            <!--<version>3.11.4</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jooq</artifactId>
         </dependency>
-
         <!-- end of jooq -->
 
 
@@ -191,7 +168,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
                 <configuration>
-                    <mainClass>com.sto.com.sto.automation.admin.Application</mainClass>
+                    <mainClass>{{context.group}}.{{context.project}}.Application</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>
@@ -262,13 +239,6 @@
                 </executions>
             </plugin>
             <!-- end of aop -->
-
-
-
-
-
-
-
 
         </plugins>
     </build>

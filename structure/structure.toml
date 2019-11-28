@@ -1,7 +1,7 @@
 project_structure = [
     # api
     {item_path = "{{ context.project }}.api", item_file = "pom.xml", item_tmpl = "api-pom.xml.tmpl", item_type = "static"},
-    {item_path = "{{ context.project }}.api.src.main.java.{{context.group}}.{{context.project}}", item_file = "HelloController.java", item_tmpl = "HelloController.java.tmpl", item_type = "static"},
+    {item_path = "{{ context.project }}.api.src.main.java.{{context.group}}.{{context.project}}.api", item_file = "HelloController.java", item_tmpl = "HelloController.java.tmpl", item_type = "static"},
 
     # app
     {item_path = "{{ context.project }}.app", item_file = "pom.xml", item_tmpl = "app-pom.xml.tmpl", item_type = "static"},
