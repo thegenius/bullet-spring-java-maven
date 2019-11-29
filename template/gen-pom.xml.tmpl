@@ -82,7 +82,7 @@
                         <database>
                             <name>org.jooq.meta.mysql.MySQLDatabase</name>
                             <outputSchemaToDefault>true</outputSchemaToDefault> <!-- 不生成库名，防止h2问题-->
-                            <inputSchema>test</inputSchema>                     <!-- 需要生成代码的数据库 -->
+                            <inputSchema>${mysql.database}</inputSchema>                     <!-- 需要生成代码的数据库 -->
                             <includes>.*</includes>                             <!-- 需要生成代码的表 -->
                             <excludes>flyway_schema_history</excludes>          <!-- 需要排除的表 -->
                         </database>
