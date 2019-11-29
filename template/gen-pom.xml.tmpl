@@ -23,28 +23,6 @@
 
     <build>
         <plugins>
-            <!-- begin of flyway -->
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>6.0.8</version>
-                <configuration>
-                    <url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?serverTimezone=Asia/Shanghai</url>
-                    <user>${mysql.username}</user>
-                    <password>${mysql.password}</password>
-                    <locations>filesystem:../app/src/main/resources/db/migration</locations>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>${mysql.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <!-- end of flyway -->
-
-
             <!-- begin of jooq -->
             <plugin>
                 <groupId>org.jooq</groupId>
