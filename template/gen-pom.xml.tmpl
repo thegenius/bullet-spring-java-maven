@@ -23,6 +23,45 @@
 
     <build>
         <plugins>
+            <!-- begin of flyway -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>6.0.8</version>
+
+                <configuration>
+                    <url>jdbc:h2:file:./target/db/test</url>
+                    <user>sa</user>
+                    <password/>
+                    <locations>filesystem:../app/src/main/resources/db/migration</locations>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.200</version>
+                    </dependency>
+                </dependencies>
+
+                <!-- mysql configuration
+                <configuration>
+                    <url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?serverTimezone=Asia/Shanghai</url>
+                    <user>${mysql.username}</user>
+                    <password>${mysql.password}</password>
+                    <locations>filesystem:../app/src/main/resources/db/migration</locations>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.version}</version>
+                    </dependency>
+                </dependencies>
+                -->
+            </plugin>
+            <!-- end of flyway -->
+
+
             <!-- begin of jooq -->
             <plugin>
                 <groupId>org.jooq</groupId>
@@ -39,35 +78,49 @@
 
                 <dependencies>
                     <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.200</version>
+                    </dependency>
+                    <!--
+                    <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
                         <version>${mysql.version}</version>
                     </dependency>
+                    -->
                 </dependencies>
 
                 <configuration>
-                    <!--<skip>true</skip> &lt;!&ndash; 默认情况下应该跳过生成 &ndash;&gt;-->
+                    <skip>${gen.dal.skip}</skip> <!-- 默认情况下应该跳过生成 -->
 
                     <jdbc>
+                        <driver>org.h2.Driver</driver>
+                        <url>jdbc:h2:file:./target/db/test</url>
+                        <user>sa</user>
+                        <password/>
+                    </jdbc>
+                    <!--
+                    <jdbc>
                         <driver>com.mysql.cj.jdbc.Driver</driver>
-                        <url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?serverTimezone=Asia/Shanghai
-                        </url>
+                        <url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?serverTimezone=Asia/Shanghai</url>
                         <user>${mysql.username}</user>
                         <password>${mysql.password}</password>
                     </jdbc>
+                    -->
 
                     <generator>
                         <database>
-                            <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                            <!-- <name>org.jooq.meta.mysql.MySQLDatabase</name> -->
+                            <name>org.jooq.meta.h2.H2Database</name>
                             <outputSchemaToDefault>true</outputSchemaToDefault> <!-- 不生成库名，防止h2问题-->
-                            <inputSchema>${mysql.database}</inputSchema>                     <!-- 需要生成代码的数据库 -->
+                            <inputSchema>PUBLIC</inputSchema>                   <!-- 需要生成代码的数据库,h2使用PUBLIC,mysql实际库名 -->
                             <includes>.*</includes>                             <!-- 需要生成代码的表 -->
                             <excludes>flyway_schema_history</excludes>          <!-- 需要排除的表 -->
                         </database>
                         <target>
                             <packageName>{{context.group}}.{{context.project}}.dal.gen</packageName> <!-- 生成的包名 -->
-                            <directory>${project.parent.basedir}/app/src/main/java/
-                            </directory>          <!-- 生成的代码位置 -->
+                            <directory>${project.parent.basedir}/app/src/main/java/</directory>          <!-- 生成的代码位置 -->
                         </target>
                         <generate>
                             <daos>true</daos>
