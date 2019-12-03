@@ -1,0 +1,18 @@
+#!/bin/bash
+work_dir=$(PWD)
+echo $work_dir
+if [[ $work_dir == *gen ]]
+  then
+  mvn flyway:clean  &&
+  mvn flyway:baseline  &&
+  mvn flyway:clean  &&
+  mvn flyway:migrate &&
+  mvn -Dgen.dal.skip=false jooq-codegen:generate
+
+  else
+  mvn flyway:clean -pl gen &&
+  mvn flyway:baseline -pl gen &&
+  mvn flyway:clean -pl gen &&
+  mvn flyway:migrate -pl gen &&
+  mvn -Dgen.dal.skip=false jooq-codegen:generate -pl gen
+fi
