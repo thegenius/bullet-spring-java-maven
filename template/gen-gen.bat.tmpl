@@ -1,0 +1,1 @@
+mvn flyway:clean -pl gen && mvn flyway:baseline -pl gen && mvn flyway:clean -pl gen && mvn flyway:migrate -pl gen && mvn -Dgen.dal.skip=false jooq-codegen:generate -pl gen

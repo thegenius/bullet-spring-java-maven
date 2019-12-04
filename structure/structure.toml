@@ -28,8 +28,10 @@ project_structure = [
     # gen
     {item_path = "{{ context.project }}.gen", item_file = "pom.xml", item_tmpl = "gen-pom.xml.tmpl", item_type = "static"},
     {item_path = "{{ context.project }}.gen", item_file = "gen.sh", item_tmpl = "gen-gen.sh.tmpl", item_type = "static"},
+    {item_path = "{{ context.project }}.gen", item_file = "gen.bat", item_tmpl = "gen-gen.bat.tmpl", item_type = "static"},
 
     # root
     {item_path = "{{ context.project }}", item_file = "pom.xml", item_tmpl = "pom.xml.tmpl", item_type = "static"},
-    {item_path = "{{ context.project }}", item_file = "run.sh", item_tmpl = "run.sh.tmpl", item_type = "static"}
+    {item_path = "{{ context.project }}", item_file = "run.sh", item_tmpl = "run.sh.tmpl", item_type = "static"},
+    {item_path = "{{ context.project }}", item_file = "run.bat", item_tmpl = "run.bat.tmpl", item_type = "static"}
 ]
