@@ -121,13 +121,29 @@
                             <excludes>flyway_schema_history</excludes>          <!-- 需要排除的表 -->
                         </database>
                         <target>
-                            <packageName>{{context.group}}.{{context.project}}.dal.gen</packageName> <!-- 生成的包名 -->
+                            <packageName>${project.parent.groupId}.${project.parent.artifactId}.dal.gen</packageName> <!-- 生成的包名 -->
                             <directory>${project.parent.basedir}/app/src/main/java/</directory>          <!-- 生成的代码位置 -->
                         </target>
                         <generate>
                             <daos>true</daos>
                             <springAnnotations>true</springAnnotations>
                         </generate>
+                        <strategy>
+                            <matchers>
+                                <tables>
+                                    <table>
+                                        <tableIdentifier>
+                                            <transform>UPPER</transform>
+                                            <expression>$0_table</expression>
+                                        </tableIdentifier>
+                                        <tableClass>
+                                            <transform>PASCAL</transform>
+                                            <expression>$0_Table</expression>
+                                        </tableClass>
+                                    </table>
+                                </tables>
+                            </matchers>
+                        </strategy>
                     </generator>
                 </configuration>
             </plugin>
